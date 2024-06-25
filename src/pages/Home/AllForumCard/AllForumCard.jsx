@@ -82,7 +82,7 @@ const AllForumCard = () => {
           {/* forum article image */}
           <figure className="relative overflow-hidden ">
             <img
-              className="max-h-80 w-full p-4"
+              className="max-h-80 w-full py-4"
               src={thumbnail_img}
               alt="News Image"
             />
@@ -90,10 +90,13 @@ const AllForumCard = () => {
 
           {/* Like and comment count */}
           <div className="mx-4 mb-4 flex justify-between items-center ">
-            <p>Like : 0 </p>
             <div className="flex items-center gap-2">
               <span>0</span>
-              <FaRegCommentAlt className="text-xl" />
+              <AiOutlineLike className="text-lg" />
+            </div>
+            <div className="flex items-center gap-2">
+              <span>0</span>
+              <FaRegCommentAlt  />
             </div>
           </div>
 
