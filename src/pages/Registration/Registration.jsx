@@ -30,7 +30,7 @@ const Registration = () => {
   return (
     <div>
       <Slide direction="down">
-        <div className="my-12">
+        <section className="my-12 container mx-auto px-4">
           <div className="w-full">
             <div
               className={`max-w-xl bg-base-100 mx-auto md:p-12 py-5 px-4 border rounded-lg`}
@@ -132,7 +132,7 @@ const Registration = () => {
               </p>
             </div>
           </div>
-        </div>
+        </section>
       </Slide>
     </div>
   );
