@@ -1,11 +1,11 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-// import { UserContext } from "../../providers/AuthProvider/AuthProvider";
 import { LuEye, LuEyeOff } from "react-icons/lu";
 import { scrollToTop } from "./../../utilities/scrollToTop";
 import swal from "sweetalert";
 import { Slide } from "react-awesome-reveal";
 import { useForm } from "react-hook-form";
+import axios from "axios";
 
 const Registration = () => {
   const [isShowPassword, setIsShowPassword] = useState(false);
@@ -20,7 +20,13 @@ const Registration = () => {
 
   const handelRegisterForm = async (data) => {
     setPasswordError(null);
-    console.log(data);
+
+    try {
+      const res = await axios.post(`${import.meta.env.VITE_API_URL}/user`, data);
+      console.log(res.data);
+    } catch (error) {
+      console.log(error.message);
+    }
   };
 
   const handelShowPassword = () => {

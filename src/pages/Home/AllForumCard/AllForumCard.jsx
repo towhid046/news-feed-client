@@ -9,6 +9,8 @@ import { GoShieldLock } from "react-icons/go";
 import { MdOutlinePeopleAlt } from "react-icons/md";
 import { CiLocationArrow1 } from "react-icons/ci";
 import { useForm } from "react-hook-form";
+import { RiDeleteBin5Fill } from "react-icons/ri";
+import { LuPenSquare } from "react-icons/lu";
 
 const AllForumCard = () => {
   const { handleSubmit, register } = useForm();
@@ -96,22 +98,31 @@ const AllForumCard = () => {
             </div>
             <div className="flex items-center gap-2">
               <span>0</span>
-              <FaRegCommentAlt  />
+              <FaRegCommentAlt />
             </div>
           </div>
 
           {/* like and comment */}
-          <div className="mx-4 mb-4 border-t pt-3 space-y-5">
+          <div className="mx-4 mb-4 border-t pt-3 flex justify-between  gap-3 ">
             <button
               data-tooltip-id="my-tooltip"
               data-tooltip-content="Like"
               className={`flex items-center gap-1 btn`}
             >
-              <>
-                <AiOutlineLike className="text-xl" />
-                <span>Like </span>
-              </>
+              <AiOutlineLike className="text-xl" />
+              <span>Like </span>
             </button>{" "}
+            <div className="flex items-center gap-3">
+              <button className={`btn`}>
+                <LuPenSquare className="text-md text-info" />
+              </button>{" "}
+              <button className={` btn`}>
+                <RiDeleteBin5Fill className="text-lg text-red-400" />
+              </button>{" "}
+            </div>
+          </div>
+
+          <div className="mx-4 mb-4 space-y-4 mt-6">
             <form onSubmit={handleSubmit(handleCommentForm)}>
               <div className="join">
                 <input
@@ -127,6 +138,15 @@ const AllForumCard = () => {
                 </button>
               </div>
             </form>
+
+            {/* display the comments */}
+            <ul>
+              <li>Lorem ipsum dolor sit amet.</li>
+              <li>Lorem ipsum dolor sit amet.</li>
+              <li>Lorem ipsum dolor sit amet.</li>
+              <li>Lorem ipsum dolor sit amet.</li>
+              <li>Lorem ipsum dolor sit amet.</li>
+            </ul>
           </div>
         </article>
       </div>
