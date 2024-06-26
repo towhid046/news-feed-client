@@ -2,9 +2,16 @@ import { Link, NavLink } from "react-router-dom";
 import useAuth from "./../../hooks/useAuth";
 import { LuUserCheck } from "react-icons/lu";
 import { Tooltip } from "react-tooltip";
+import swal from "sweetalert";
 
 const Navbar = () => {
-  const { user } = useAuth();
+  const { user, setUser } = useAuth();
+
+  const handleLogOutUser = () => {
+    localStorage.removeItem("user");
+    setUser(null);
+    swal("Logout Success", "You have logout successfully", "success");
+  };
 
   return (
     <nav className="py-5 bg-white px-4 shadow-sm z-50 sticky top-0">
@@ -21,14 +28,17 @@ const Navbar = () => {
           {user ? (
             <div className="flex items-center gap-3">
               <li>
-                <button className="btn btn-neutral text-base-100">
+                <button
+                  onClick={handleLogOutUser}
+                  className="btn btn-neutral text-base-100"
+                >
                   Log Out
                 </button>
               </li>
               <li>
                 <button
                   data-tooltip-id="my-tooltip"
-                  data-tooltip-content="Hello world!"
+                  data-tooltip-content={user?.username}
                   className="btn btn-info text-base-100"
                 >
                   <LuUserCheck className="text-2xl" />

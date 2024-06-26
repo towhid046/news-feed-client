@@ -42,7 +42,7 @@ const AuthProvider = ({ children }) => {
     }
   };
 
-  const userInfo = { user, loginUser };
+  const userInfo = { user, loginUser, setUser  };
 
   return (
     <UserContext.Provider value={userInfo}>{children}</UserContext.Provider>

@@ -9,8 +9,11 @@ import useAxiosPublic from "../../hooks/useAxiosPublic";
 
 const Registration = () => {
   const [isShowPassword, setIsShowPassword] = useState(false);
-  const [passwordError, setPasswordError] = useState(null);
+  const [invalidUsername, setInvalidUsername] = useState(null);
+  const [invalidPassword, setInvalidPassword] = useState(null);
+
   const { register, handleSubmit } = useForm();
+
   const axiosPublic = useAxiosPublic();
   const navigate = useNavigate();
 
@@ -19,7 +22,10 @@ const Registration = () => {
   }, []);
 
   const handelRegisterForm = async (data) => {
-    setPasswordError(null);
+    if (invalidPassword || invalidUsername) {
+      return;
+    }
+
     try {
       const res = await axiosPublic.post(`/user`, data);
       if (res?.data?.insertedId) {
@@ -35,6 +41,27 @@ const Registration = () => {
       }
     } catch (error) {
       console.error(error.message);
+    }
+  };
+
+  const handleOnChangeUsername = async (value) => {
+    setInvalidUsername(null);
+    const res = await axiosPublic.get(`/username-status?username=${value}`);
+    if (res.data?.message === "username already exist, try another") {
+      return setInvalidUsername(res.data?.message);
+    }
+    if (/[A-Z]/.test(value)) {
+      setInvalidUsername(`Username should't contain any UPPERCASE`);
+    }
+    if (/[\s]/.test(value)) {
+      setInvalidUsername(`Username should't contain any space`);
+    }
+  };
+
+  const handleOnChangePassword = (pass) => {
+    setInvalidPassword(null);
+    if (pass.length < 6) {
+      setInvalidPassword("Password length must be at least 6 characters");
     }
   };
 
@@ -78,11 +105,14 @@ const Registration = () => {
                   <input
                     type="text"
                     {...register("username")}
+                    onChange={(e) => handleOnChangeUsername(e.target.value)}
                     placeholder="User name"
                     className="bg-base-200 text-base-content w-full focus:outline-none border-2 focus:border-blue-300   input"
                     required
                   />
+                  <small className="text-red-600">{invalidUsername}</small>
                 </div>
+
                 {/* Password input */}
                 <div className="relative">
                   <label className="label">
@@ -91,6 +121,7 @@ const Registration = () => {
                   <input
                     type={isShowPassword ? "text" : "password"}
                     {...register("password")}
+                    onChange={(e) => handleOnChangePassword(e.target.value)}
                     placeholder="Password"
                     className="bg-base-200 text-base-content w-full focus:outline-none border-2 focus:border-blue-300   input"
                     required
@@ -115,7 +146,7 @@ const Registration = () => {
                     )}
                   </div>
                 </div>
-                <small className="text-red-600">{passwordError}</small>
+                <small className="text-red-600">{invalidPassword}</small>
 
                 {/* Trams and condition */}
                 <div className="flex items-center gap-1 mt-6">

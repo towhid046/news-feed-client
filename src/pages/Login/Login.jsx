@@ -1,16 +1,17 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-// import { UserContext } from "../../providers/AuthProvider/AuthProvider";
 import { LuEye, LuEyeOff } from "react-icons/lu";
 import { scrollToTop } from "./../../utilities/scrollToTop";
 import { Slide } from "react-awesome-reveal";
 import { useForm } from "react-hook-form";
 import useAuth from "../../hooks/useAuth";
+import ResetPasswordModal from "../../components/unique/ResetPasswordModal/ResetPasswordModal";
 
 const Login = () => {
-  const [isShowPassword, setIsShowPassword] = useState(false);
   const [isUsernameError, setIsUsernameError] = useState(null);
   const [isPasswordError, setIsPasswordError] = useState(null);
+  const [isShowPassword, setIsShowPassword] = useState(false);
+  const [isResetFormOpen, setIsResetFormOpen] = useState(false);
 
   const { register, handleSubmit } = useForm();
   const { loginUser } = useAuth();
@@ -119,6 +120,15 @@ const Login = () => {
                 </div>
               </form>
 
+              <div className="text-center mt-3">
+                <button
+                  onClick={() => setIsResetFormOpen(true)}
+                  className="underline hover:text-blue-400 transition duration-300"
+                >
+                  Forgat Password
+                </button>
+              </div>
+
               <p className="text-center mt-5">
                 Haven't an account?{" "}
                 <Link
@@ -132,6 +142,10 @@ const Login = () => {
           </div>
         </section>
       </Slide>
+
+      {isResetFormOpen && (
+        <ResetPasswordModal setIsResetFormOpen={setIsResetFormOpen} />
+      )}
     </div>
   );
 };
