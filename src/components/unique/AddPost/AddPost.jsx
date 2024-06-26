@@ -8,10 +8,11 @@ import swal from "sweetalert";
 import { useNavigate } from "react-router-dom";
 import moment from "moment";
 import useAxiosPublic from "../../../hooks/useAxiosPublic";
+import PropTypes from "prop-types";
 
-const AddPost = () => {
+const AddPost = ({ refetch }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit, reset } = useForm();
   const { user } = useAuth();
   const navigate = useNavigate();
   const axiosPublic = useAxiosPublic();
@@ -49,6 +50,8 @@ const AddPost = () => {
       if (res?.data?.insertedId) {
         swal("Added", "Your post have been added", "success");
         setIsModalOpen(false);
+        refetch();
+        reset();
       }
     } catch (error) {
       console.error(error.message);
@@ -128,6 +131,10 @@ const AddPost = () => {
       <Tooltip id="my-tooltip" />
     </section>
   );
+};
+
+AddPost.propTypes = {
+  refetch: PropTypes.func.isRequired,
 };
 
 export default AddPost;

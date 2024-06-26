@@ -1,4 +1,3 @@
-import { useState } from "react";
 import SingleNewsCard from "./SingleNewsCard/SingleNewsCard";
 import AddPost from "./../../components/unique/AddPost/AddPost";
 import { useQuery } from "@tanstack/react-query";
@@ -37,11 +36,15 @@ const Home = () => {
     <>
       <section className="mb-12">
         <div className="pt-10 container mx-auto px-4 ">
-          <AddPost />
+          <AddPost refetch={refetch} />
 
           <div className="flex flex-col gap-7">
-            {allNews?.map((singleNews, index) => (
-              <SingleNewsCard singleNews={singleNews} key={singleNews._id} />
+            {[...allNews]?.reverse()?.map((singleNews) => (
+              <SingleNewsCard
+                singleNews={singleNews}
+                key={singleNews._id}
+                refetch={refetch}
+              />
             ))}
           </div>
         </div>
