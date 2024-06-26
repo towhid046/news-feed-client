@@ -4,12 +4,10 @@ import { TiDelete } from "react-icons/ti";
 import swal from "sweetalert";
 import useAxiosPublic from "../../../hooks/useAxiosPublic";
 import PropTypes from "prop-types";
-import { useNavigate } from "react-router-dom";
 
 const UpdatePost = ({ refetch, setIsUpdateFormOpen, updatableNews }) => {
   const { register, handleSubmit } = useForm();
   const axiosPublic = useAxiosPublic();
-  const navigate = useNavigate();
   const { description, thumbnail_img, _id } = updatableNews;
 
   const handleUpdateNewsData = async (data) => {
