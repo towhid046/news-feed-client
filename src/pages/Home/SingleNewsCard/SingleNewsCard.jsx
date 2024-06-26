@@ -5,15 +5,18 @@ import { FaRegCommentAlt } from "react-icons/fa";
 import PropTypes from "prop-types";
 import { scrollToTop } from "../../../utilities/scrollToTop";
 import { CiLocationArrow1 } from "react-icons/ci";
-import { useForm } from "react-hook-form";
+import { set, useForm } from "react-hook-form";
 import { RiDeleteBin5Fill } from "react-icons/ri";
 import { LuPenSquare } from "react-icons/lu";
 import useAuth from "./../../../hooks/useAuth";
 import swal from "sweetalert";
 import useAxiosPublic from "../../../hooks/useAxiosPublic";
+import UpdatePost from "./../../../components/unique/UpdatePost/UpdatePost";
 
 const SingleNewsCard = ({ singleNews, refetch }) => {
+  const [isUpdateFormOpen, setIsUpdateFormOpen] = useState(false);
   const { handleSubmit, register } = useForm();
+  const [updatableNews, setUpdatableNews] = useState({});
   const { user } = useAuth();
   const axiosPublic = useAxiosPublic();
 
@@ -31,9 +34,11 @@ const SingleNewsCard = ({ singleNews, refetch }) => {
     comments,
   } = singleNews;
 
-  const [initialDes, setInitialDes] = useState(
-    description?.split(" ").slice(0, 20).join(" ")
-  );
+  const [initialDes, setInitialDes] = useState("");
+
+  useEffect(() => {
+    setInitialDes(description?.split(" ").slice(0, 20).join(" "));
+  }, [description]);
 
   const handleShowFullDescription = () => {
     setInitialDes(description);
@@ -67,6 +72,16 @@ const SingleNewsCard = ({ singleNews, refetch }) => {
     });
   };
 
+  const handleUpdatePost = async (id) => {
+    try {
+      const res = await axiosPublic.get(`/news/${id}`);
+      setUpdatableNews(res?.data);
+      setIsUpdateFormOpen(true);
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
   return (
     <div className=" max-w-3xl mx-auto">
       <article className="border rounded-lg  border-opacity-10 justify-between flex flex-col">
@@ -75,7 +90,12 @@ const SingleNewsCard = ({ singleNews, refetch }) => {
           <div className=" space-y-4">
             <ul className="flex flex-wrap gap-4 justify-between  items-center">
               <li>
-                <span className="text- font-semibold text-md">{username}</span>
+                <p className="text- font-semibold text-md">
+                  {username}{" "}
+                  {user?.username === username && (
+                    <span className="badge badge-neutral py-1"> You</span>
+                  )}
+                </p>
                 <div className="flex items-center gap-2">
                   <CiCalendar className="text-custom-primary text-xl" />
                   <small className="text-gray-400">{release_date}</small>
@@ -94,6 +114,7 @@ const SingleNewsCard = ({ singleNews, refetch }) => {
                       <RiDeleteBin5Fill className="text-lg text-red-400" />
                     </button>{" "}
                     <button
+                      onClick={() => handleUpdatePost(_id)}
                       data-tooltip-id="my-tooltip"
                       data-tooltip-content="Update"
                       className={`btn`}
@@ -131,7 +152,7 @@ const SingleNewsCard = ({ singleNews, refetch }) => {
         {/* Like and comment count */}
         <div className="mx-4 mb-4 flex justify-between items-center ">
           <div className="flex items-center gap-2">
-            <span>{likes}</span>
+            <span>{likes?.length}</span>
             <AiOutlineLike className="text-lg" />
           </div>
           <div className="flex items-center gap-2">
@@ -178,13 +199,22 @@ const SingleNewsCard = ({ singleNews, refetch }) => {
           </ul>
         </div>
       </article>
+
+      {/* Update form modal */}
+      {isUpdateFormOpen && (
+        <UpdatePost
+          refetch={refetch}
+          updatableNews={updatableNews}
+          setIsUpdateFormOpen={setIsUpdateFormOpen}
+        />
+      )}
     </div>
   );
 };
 
 SingleNewsCard.propTypes = {
   singleNews: PropTypes.object.isRequired,
-  refetch: PropTypes.func.isRequired,
+  refetch: PropTypes.func,
 };
 
 export default SingleNewsCard;

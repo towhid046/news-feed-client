@@ -1,11 +1,9 @@
 import SingleNewsCard from "./SingleNewsCard/SingleNewsCard";
 import AddPost from "./../../components/unique/AddPost/AddPost";
-import { useQuery } from "@tanstack/react-query";
-import useAxiosPublic from "./../../hooks/useAxiosPublic";
 import LoadingSpinner from "./../../components/shared/LoadingSpinner/LoadingSpinner";
+import useData from "../../hooks/useData";
 
 const Home = () => {
-  const axiosPublic = useAxiosPublic();
 
   const {
     data: allNews,
@@ -13,13 +11,7 @@ const Home = () => {
     isError,
     error,
     refetch,
-  } = useQuery({
-    queryKey: ["news"],
-    queryFn: async () => {
-      const res = await axiosPublic.get("/news");
-      return res?.data;
-    },
-  });
+  } = useData(["all-news"], "/news");
 
   if (isError) {
     return (
@@ -28,6 +20,7 @@ const Home = () => {
       </div>
     );
   }
+  
   if (isLoading) {
     return <LoadingSpinner />;
   }

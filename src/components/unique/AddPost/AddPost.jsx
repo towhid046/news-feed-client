@@ -42,7 +42,7 @@ const AddPost = ({ refetch }) => {
       release_date: moment().format("L"),
       description: data.description,
       thumbnail_img: data?.imgUrl,
-      likes: 0,
+      likes: [],
       comments: [],
     };
     try {
