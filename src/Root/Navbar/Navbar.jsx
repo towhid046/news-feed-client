@@ -1,10 +1,11 @@
 import { Link, NavLink } from "react-router-dom";
+import useAuth from "./../../hooks/useAuth";
+import { LuUserCheck } from "react-icons/lu";
+import { Tooltip } from "react-tooltip";
 
 const Navbar = () => {
-  const links = [
-    { id: 1, title: "Login", url: "/login" },
-    { id: 1, title: "Register", url: "/registration" },
-  ];
+  const { user } = useAuth();
+
   return (
     <nav className="py-5 bg-white px-4 shadow-sm z-50 sticky top-0">
       <div className="container mx-auto flex justify-between  items-center gap-2">
@@ -17,18 +18,36 @@ const Navbar = () => {
           </Link>
         </h2>
         <ul className="flex items-center gap-3 menu-special-class">
-          <li>
-            <NavLink className="btn btn-neutral text-base-100" to="/login">
-              Login
-            </NavLink>
-          </li>
-          <li>
-            <NavLink className="btn btn-info text-base-100" to="/registration">
-              Register
-            </NavLink>
-          </li>
+          {user ? (
+            <div className="flex items-center gap-3">
+              <li>
+                <button className="btn btn-neutral text-base-100">
+                  Log Out
+                </button>
+              </li>
+              <li>
+                <button
+                  data-tooltip-id="my-tooltip"
+                  data-tooltip-content="Hello world!"
+                  className="btn btn-info text-base-100"
+                >
+                  <LuUserCheck className="text-2xl" />
+                </button>
+              </li>
+            </div>
+          ) : (
+            <li>
+              <NavLink
+                className="btn btn-info text-base-100"
+                to="/registration"
+              >
+                Register
+              </NavLink>
+            </li>
+          )}
         </ul>
       </div>
+      <Tooltip id="my-tooltip" />
     </nav>
   );
 };

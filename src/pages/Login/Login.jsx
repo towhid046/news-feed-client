@@ -3,14 +3,17 @@ import { useEffect, useState } from "react";
 // import { UserContext } from "../../providers/AuthProvider/AuthProvider";
 import { LuEye, LuEyeOff } from "react-icons/lu";
 import { scrollToTop } from "./../../utilities/scrollToTop";
-import swal from "sweetalert";
 import { Slide } from "react-awesome-reveal";
 import { useForm } from "react-hook-form";
+import useAuth from "../../hooks/useAuth";
 
 const Login = () => {
   const [isShowPassword, setIsShowPassword] = useState(false);
-  const [passwordError, setPasswordError] = useState(null);
+  const [isUsernameError, setIsUsernameError] = useState(null);
+  const [isPasswordError, setIsPasswordError] = useState(null);
+
   const { register, handleSubmit } = useForm();
+  const { loginUser } = useAuth();
 
   const navigate = useNavigate();
 
@@ -19,8 +22,27 @@ const Login = () => {
   }, []);
 
   const handelLoginForm = async (data) => {
-    setPasswordError(null);
-    console.log(data);
+    setIsPasswordError(null);
+    setIsUsernameError(null);
+
+    try {
+      const status = await loginUser(data);
+      if (status === "success") {
+        navigate("/");
+        return;
+      }
+      if (status === "Username not found") {
+        setIsUsernameError(status);
+        return;
+      }
+
+      if (status === "Password doesn't match") {
+        setIsPasswordError(status);
+        return;
+      }
+    } catch (error) {
+      console.error(error.message);
+    }
   };
 
   const handelShowPassword = () => {
@@ -54,7 +76,9 @@ const Login = () => {
                     className="bg-base-200 text-base-content w-full focus:outline-none border-2 focus:border-blue-300   input"
                     required
                   />
+                  <small className="text-red-600">{isUsernameError}</small>
                 </div>
+
                 {/* Password input */}
                 <div className="relative">
                   <label className="label">
@@ -87,7 +111,7 @@ const Login = () => {
                     )}
                   </div>
                 </div>
-                <small className="text-red-600">{passwordError}</small>
+                <small className="text-red-600">{isPasswordError}</small>
                 <div className="form-control mt-6">
                   <button className="btn w-full   btn-info text-base-100">
                     Login

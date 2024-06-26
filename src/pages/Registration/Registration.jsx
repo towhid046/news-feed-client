@@ -2,16 +2,16 @@ import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { LuEye, LuEyeOff } from "react-icons/lu";
 import { scrollToTop } from "./../../utilities/scrollToTop";
-import swal from "sweetalert";
 import { Slide } from "react-awesome-reveal";
 import { useForm } from "react-hook-form";
-import axios from "axios";
+import swal from "sweetalert";
+import useAxiosPublic from "../../hooks/useAxiosPublic";
 
 const Registration = () => {
   const [isShowPassword, setIsShowPassword] = useState(false);
   const [passwordError, setPasswordError] = useState(null);
   const { register, handleSubmit } = useForm();
-
+  const axiosPublic = useAxiosPublic();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -20,12 +20,21 @@ const Registration = () => {
 
   const handelRegisterForm = async (data) => {
     setPasswordError(null);
-
     try {
-      const res = await axios.post(`${import.meta.env.VITE_API_URL}/user`, data);
-      console.log(res.data);
+      const res = await axiosPublic.post(`/user`, data);
+      if (res?.data?.insertedId) {
+        swal(
+          "Register Success",
+          "Thank you for your registration, Please Login",
+          "success"
+        );
+        navigate("/login");
+      }
+      if (res.data?.message) {
+        swal("Opps!", `${res?.data?.message}`, "warning");
+      }
     } catch (error) {
-      console.log(error.message);
+      console.error(error.message);
     }
   };
 
