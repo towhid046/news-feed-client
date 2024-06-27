@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import useAuth from "../../../hooks/useAuth";
-import PropTypes, { string } from "prop-types";
+import PropTypes, { object, string } from "prop-types";
 
 const Comments = ({ comments }) => {
   const [initialComments, setInitialComments] = useState([]);
@@ -48,7 +48,7 @@ const Comments = ({ comments }) => {
 };
 
 Comments.propTypes = {
-  comments: PropTypes.arrayOf(string),
+  comments: PropTypes.arrayOf(object),
   handleShowAllComments: PropTypes.func,
 };
 

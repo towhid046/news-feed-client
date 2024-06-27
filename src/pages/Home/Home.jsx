@@ -3,15 +3,29 @@ import AddPost from "./../../components/unique/AddPost/AddPost";
 import LoadingSpinner from "./../../components/shared/LoadingSpinner/LoadingSpinner";
 import useData from "../../hooks/useData";
 import ErrorElement from "./../../components/shared/ErrorElement/ErrorElement";
+import { useQuery } from "@tanstack/react-query";
+import useAxiosPublic from './../../hooks/useAxiosPublic';
+
 
 const Home = () => {
+  const axiosPublic = useAxiosPublic()
+  
   const {
     data: allNews,
     isLoading,
     isError,
     error,
     refetch,
-  } = useData(["all-news"], "/news");
+  } = useQuery({
+    queryKey: ['news'],
+    queryFn: async () => {
+      const res = await axiosPublic.get('/news');
+      return res?.data;
+    },
+  });
+  
+  
+  // useData(["all-news"], "/news");
 
   if (isError) {
     return <ErrorElement error={error} />;

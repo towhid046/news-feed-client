@@ -1,6 +1,6 @@
 import { FaRegCommentAlt } from "react-icons/fa";
 import { AiOutlineLike } from "react-icons/ai";
-import PropTypes, { string } from "prop-types";
+import PropTypes, { object, string } from "prop-types";
 const LikeCommentCount = ({ likes, comments }) => {
   return (
     <div className="mx-4 mb-4 flex justify-between items-center ">
@@ -18,7 +18,7 @@ const LikeCommentCount = ({ likes, comments }) => {
 
 LikeCommentCount.propTypes = {
   likes: PropTypes.arrayOf(string),
-  comments: PropTypes.arrayOf(string),
+  comments: PropTypes.arrayOf(object),
 };
 
 export default LikeCommentCount;
