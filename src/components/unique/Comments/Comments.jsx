@@ -20,8 +20,8 @@ const Comments = ({ comments }) => {
         {comments.length ? (
           initialComments?.map((comment, index) => (
             <li key={index} className="border rounded-lg py-2.5 px-4 mb-3">
-              <h6 className="font-bold">{user?.username}</h6>
-              <p>{comment}</p>
+              <h6 className="font-bold">{comment?.comment_author}</h6>
+              <p>{comment?.comment_text}</p>
             </li>
           ))
         ) : (

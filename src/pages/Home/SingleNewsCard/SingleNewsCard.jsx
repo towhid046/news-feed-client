@@ -49,8 +49,27 @@ const SingleNewsCard = ({ singleNews, refetch }) => {
   };
 
   const handleComment = async (data) => {
+    if (!user) {
+      swal({
+        title: "Login first",
+        text: "Please login to add comment & like on post!",
+        icon: "info",
+        buttons: true,
+        dangerMode: false,
+      }).then(async (pressOk) => {
+        if (pressOk) {
+          navigate("/login");
+        }
+      });
+      return;
+    }
+
+    const newComment = {
+      comment_author: user?.username,
+      comment_text: data.comment,
+    };
     try {
-      const res = await axiosPublic.put(`/comments?id=${_id}`, data);
+      const res = await axiosPublic.put(`/comments?id=${_id}`, newComment);
       if (res?.data?.modifiedCount) {
         swal(
           "Comment Added!!",
@@ -103,7 +122,7 @@ const SingleNewsCard = ({ singleNews, refetch }) => {
     if (!user) {
       swal({
         title: "Login first",
-        text: "Please login to like and comment on post!",
+        text: "Please login to like & comment on post!",
         icon: "info",
         buttons: true,
         dangerMode: false,

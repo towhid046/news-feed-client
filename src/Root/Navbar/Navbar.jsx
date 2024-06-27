@@ -1,6 +1,6 @@
 import { Link, NavLink } from "react-router-dom";
 import useAuth from "./../../hooks/useAuth";
-import { LuUserCheck } from "react-icons/lu";
+import { LuUserCheck, LuUserPlus } from "react-icons/lu";
 import { Tooltip } from "react-tooltip";
 import swal from "sweetalert";
 
@@ -46,14 +46,27 @@ const Navbar = () => {
               </li>
             </div>
           ) : (
-            <li>
-              <NavLink
-                className="btn btn-info text-base-100"
-                to="/registration"
-              >
-                Register
-              </NavLink>
-            </li>
+            <div className="flex items-center gap-3">
+              <li>
+                <NavLink
+                  className="btn btn-info text-base-100"
+                  to="/registration"
+                >
+                  Register
+                </NavLink>
+              </li>
+
+              <li>
+                <NavLink
+                  data-tooltip-id="my-tooltip"
+                  data-tooltip-content="Login"
+                  className="btn btn-neutral text-base-100"
+                  to="/login"
+                >
+                  <LuUserPlus className="text-2xl" />
+                </NavLink>
+              </li>
+            </div>
           )}
         </ul>
       </div>
