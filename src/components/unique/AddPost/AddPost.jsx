@@ -60,7 +60,7 @@ const AddPost = ({ refetch }) => {
 
   return (
     <section>
-      <div className="border p-5 rounded-lg max-w-3xl mb-10 mx-auto">
+      <div className="border p-5 rounded-lg xl:w-[60%] lg:w-[70%] md:w-[90%] w-full mb-10 mx-auto">
         <h2 className="text-2xl font-bold mb-3">Create a post</h2>
         <button
           onClick={handleOpenModal}

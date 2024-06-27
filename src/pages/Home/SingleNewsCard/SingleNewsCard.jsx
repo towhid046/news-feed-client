@@ -1,24 +1,28 @@
 import { CiCalendar } from "react-icons/ci";
 import { useEffect, useState } from "react";
 import { AiOutlineLike } from "react-icons/ai";
-import { FaRegCommentAlt } from "react-icons/fa";
 import PropTypes from "prop-types";
 import { scrollToTop } from "../../../utilities/scrollToTop";
 import { CiLocationArrow1 } from "react-icons/ci";
-import { set, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { RiDeleteBin5Fill } from "react-icons/ri";
 import { LuPenSquare } from "react-icons/lu";
 import useAuth from "./../../../hooks/useAuth";
 import swal from "sweetalert";
 import useAxiosPublic from "../../../hooks/useAxiosPublic";
 import UpdatePost from "./../../../components/unique/UpdatePost/UpdatePost";
+import { useNavigate } from "react-router-dom";
+import Comments from "./../../../components/unique/Comments/Comments";
+import NewsImage from "../../../components/unique/NewsImage/NewsImage";
+import LikeCommentCount from "./../../../components/unique/LikeCommentCount/LikeCommentCount";
 
 const SingleNewsCard = ({ singleNews, refetch }) => {
   const [isUpdateFormOpen, setIsUpdateFormOpen] = useState(false);
-  const { handleSubmit, register } = useForm();
+  const { handleSubmit, register, reset } = useForm();
   const [updatableNews, setUpdatableNews] = useState({});
   const { user } = useAuth();
   const axiosPublic = useAxiosPublic();
+  const navigate = useNavigate();
 
   useEffect(() => {
     scrollToTop();
@@ -44,8 +48,21 @@ const SingleNewsCard = ({ singleNews, refetch }) => {
     setInitialDes(description);
   };
 
-  const handleCommentForm = (data) => {
-    console.log(data);
+  const handleComment = async (data) => {
+    try {
+      const res = await axiosPublic.put(`/comments?id=${_id}`, data);
+      if (res?.data?.modifiedCount) {
+        swal(
+          "Comment Added!!",
+          "Your comment have been added successfully",
+          "success"
+        );
+        refetch();
+        reset();
+      }
+    } catch (error) {
+      console.error(error.message);
+    }
   };
 
   const handleRemovePost = (id, username) => {
@@ -82,15 +99,43 @@ const SingleNewsCard = ({ singleNews, refetch }) => {
     }
   };
 
+  const handleLikeButton = async (id, username) => {
+    if (!user) {
+      swal({
+        title: "Login first",
+        text: "Please login to like and comment on post!",
+        icon: "info",
+        buttons: true,
+        dangerMode: false,
+      }).then(async (pressOk) => {
+        if (pressOk) {
+          navigate("/login");
+        }
+      });
+      return;
+    }
+
+    try {
+      const { data } = await axiosPublic.put(
+        `/likes?id=${id}&username=${username}`
+      );
+      if (data.modifiedCount) {
+        refetch();
+      }
+    } catch (error) {
+      console.error(error.message);
+    }
+  };
+
   return (
-    <div className=" max-w-3xl mx-auto">
+    <div className="  xl:w-[60%] lg:w-[70%] md:w-[90%] w-full mx-auto">
       <article className="border rounded-lg  border-opacity-10 justify-between flex flex-col">
         {/* forum article text */}
         <div className="p-5 pb-1">
           <div className=" space-y-4">
             <ul className="flex flex-wrap gap-4 justify-between  items-center">
               <li>
-                <p className="text- font-semibold text-md">
+                <p className="text- font-semibold text-lg">
                   {username}{" "}
                   {user?.username === username && (
                     <span className="badge badge-neutral py-1"> You</span>
@@ -129,11 +174,12 @@ const SingleNewsCard = ({ singleNews, refetch }) => {
               {initialDes}
               <em
                 onClick={handleShowFullDescription}
-                className={`${
-                  initialDes.split(" ").length > 20 && "hidden"
-                } text-blue-400 cursor-pointer`}
+                className={`
+                  text-blue-400 cursor-pointer
+                  ${description.split(" ").length <= 20 ? "hidden" : "block"}
+                  ${initialDes.split(" ").length > 20 && "hidden"}
+                   `}
               >
-                {" "}
                 ...see more
               </em>
             </p>
@@ -141,63 +187,43 @@ const SingleNewsCard = ({ singleNews, refetch }) => {
         </div>
 
         {/* forum article image */}
-        <figure className="relative overflow-hidden ">
-          <img
-            className="max-h-80 w-full py-4"
-            src={thumbnail_img}
-            alt="News Image"
-          />
-        </figure>
+        <NewsImage thumbnail_img={thumbnail_img} />
 
         {/* Like and comment count */}
-        <div className="mx-4 mb-4 flex justify-between items-center ">
-          <div className="flex items-center gap-2">
-            <span>{likes?.length}</span>
-            <AiOutlineLike className="text-lg" />
-          </div>
-          <div className="flex items-center gap-2">
-            <span>{comments.length}</span>
-            <FaRegCommentAlt />
-          </div>
-        </div>
+        <LikeCommentCount likes={likes} comments={comments} />
 
         {/* like and comment */}
-        <div className="mx-4 mb-4 border-t pt-3 flex justify-between  gap-3 ">
+        <div className="mx-4 mb-4 border-t pt-3  flex justify-between md:gap-5 gap-3 ">
           <button
+            onClick={() => handleLikeButton(_id, user?.username)}
             data-tooltip-id="my-tooltip"
             data-tooltip-content="Like"
-            className={`flex items-center gap-1 btn`}
+            className={`flex items-center gap-1 btn
+              ${likes.includes(user?.username) && "text-blue-400"}
+              `}
           >
             <AiOutlineLike className="text-xl" />
             <span>Like </span>
           </button>{" "}
-          <form onSubmit={handleSubmit(handleCommentForm)}>
-            <div className="join">
+          <form className="w-full" onSubmit={handleSubmit(handleComment)}>
+            <div className="join w-full">
               <input
                 {...register("comment")}
                 className="input  join-item
-                  bg-base-200 text-base-content w-full  focus:outline-none  focus:border-blue-100 
+                  bg-base-200 text-base-content w-full  focus:outline-none border-2 focus:border-blue-200 
                   "
-                placeholder="Leave a comment"
+                placeholder="What do you think about this post, Leave a comment!!"
                 required
               />
-              <button className=" join-item rounded-r-lg bg-gray-200 py-2.5 px-4 hover:bg-gray-300 transition duration-150">
-                <CiLocationArrow1 className="text-xl" />
+              <button className=" join-item rounded-r-lg bg-gray-200 py-2.5 px-4 hover:bg-gray-300 transition hover:text-info duration-150">
+                <CiLocationArrow1 className="text-xl " />
               </button>
             </div>
           </form>
         </div>
 
-        <div className="mx-4 mb-4 space-y-4 mt-6">
-          {/* display the comments */}
-          <ul>
-            <li>Lorem ipsum dolor sit amet.</li>
-            <li>Lorem ipsum dolor sit amet.</li>
-            <li>Lorem ipsum dolor sit amet.</li>
-            <li>Lorem ipsum dolor sit amet.</li>
-            <li>Lorem ipsum dolor sit amet.</li>
-          </ul>
-        </div>
+        {/* display the comments */}
+        <Comments comments={comments} />
       </article>
 
       {/* Update form modal */}

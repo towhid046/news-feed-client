@@ -1,9 +1,14 @@
-import React from 'react'
-
-const ErrorElement = () => {
+import PropTypes from "prop-types";
+const ErrorElement = ({ error }) => {
   return (
-    <div>ErrorElement</div>
-  )
-}
+    <div className="flex items-center justify-center text-3xl font-bold italic text-gray-400">
+      <h2>{error}</h2>
+    </div>
+  );
+};
 
-export default ErrorElement
+ErrorElement.propTypes = {
+  error: PropTypes.string,
+};
+
+export default ErrorElement;

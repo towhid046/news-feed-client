@@ -2,9 +2,9 @@ import SingleNewsCard from "./SingleNewsCard/SingleNewsCard";
 import AddPost from "./../../components/unique/AddPost/AddPost";
 import LoadingSpinner from "./../../components/shared/LoadingSpinner/LoadingSpinner";
 import useData from "../../hooks/useData";
+import ErrorElement from "./../../components/shared/ErrorElement/ErrorElement";
 
 const Home = () => {
-
   const {
     data: allNews,
     isLoading,
@@ -14,13 +14,9 @@ const Home = () => {
   } = useData(["all-news"], "/news");
 
   if (isError) {
-    return (
-      <div className="flex items-center justify-center text-3xl font-bold italic text-gray-400">
-        <h2>{error}</h2>
-      </div>
-    );
+    return <ErrorElement error={error} />;
   }
-  
+
   if (isLoading) {
     return <LoadingSpinner />;
   }
