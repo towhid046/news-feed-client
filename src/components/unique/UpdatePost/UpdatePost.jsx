@@ -72,7 +72,7 @@ const UpdatePost = ({ refetch, setIsUpdateFormOpen, updatableNews }) => {
             <div className="flex justify-end pt-5">
               <input
                 type="submit"
-                className="btn btn-info md:w-max md:btn-md w-full text-base-100"
+                className="btn btn-info bg-blue-400 md:w-max md:btn-md w-full text-base-100"
                 value="Update"
               />
             </div>

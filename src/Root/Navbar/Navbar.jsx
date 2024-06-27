@@ -39,7 +39,7 @@ const Navbar = () => {
                 <button
                   data-tooltip-id="my-tooltip"
                   data-tooltip-content={user?.username}
-                  className="btn btn-info text-base-100"
+                  className="btn btn-info bg-blue-400 text-base-100"
                 >
                   <LuUserCheck className="text-2xl" />
                 </button>
