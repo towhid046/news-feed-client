@@ -150,7 +150,7 @@ const SingleNewsCard = ({ singleNews, refetch }) => {
     <div className="  xl:w-[60%] lg:w-[70%] md:w-[90%] w-full mx-auto">
       <article className="border rounded-lg  border-opacity-10 justify-between flex flex-col">
         {/* forum article text */}
-        <div className="p-5 pb-1">
+        <div className="p-5 pb-1 border-b mb-3">
           <div className=" space-y-4">
             <ul className="flex flex-wrap gap-4 justify-between  items-center">
               <li>
@@ -206,7 +206,7 @@ const SingleNewsCard = ({ singleNews, refetch }) => {
         </div>
 
         {/* forum article image */}
-        <NewsImage thumbnail_img={thumbnail_img} />
+        {thumbnail_img && <NewsImage thumbnail_img={thumbnail_img} />}
 
         {/* Like and comment count */}
         <LikeCommentCount likes={likes} comments={comments} />

@@ -114,7 +114,7 @@ const Login = () => {
                 </div>
                 <small className="text-red-600">{isPasswordError}</small>
                 <div className="form-control mt-6">
-                  <button className="btn w-full   btn-info text-base-100">
+                  <button className="btn w-full   btn-info bg-blue-400 text-base-100">
                     Login
                   </button>
                 </div>
@@ -133,7 +133,7 @@ const Login = () => {
                 Haven't an account?{" "}
                 <Link
                   to={"/registration"}
-                  className=" cursor-pointer link link-info italic font-semibold"
+                  className=" cursor-pointer link link-info text-blue-400 italic font-semibold"
                 >
                   Register
                 </Link>

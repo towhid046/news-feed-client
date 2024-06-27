@@ -49,7 +49,7 @@ const Navbar = () => {
             <div className="flex items-center gap-3">
               <li>
                 <NavLink
-                  className="btn btn-info text-base-100"
+                  className="btn btn-info bg-blue-400 text-base-100"
                   to="/registration"
                 >
                   Register

@@ -98,14 +98,13 @@ const AddPost = ({ refetch }) => {
               </div>
               <div>
                 <label className="label">
-                  <strong className="label-text">Image URL</strong>
+                  <strong className="label-text">Image URL (Optional)</strong>
                 </label>
                 <input
                   type="text"
                   {...register("imgUrl")}
                   placeholder="Pest image url"
                   className="bg-base-200 text-base-content w-full focus:outline-none border-2 focus:border-blue-300   input"
-                  required
                 />
               </div>
               <div className="flex justify-end pt-5">

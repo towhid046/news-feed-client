@@ -161,7 +161,7 @@ const Registration = () => {
                 </div>
 
                 <div className="form-control mt-6">
-                  <button className="btn w-full   btn-info text-base-100">
+                  <button className="btn w-full   btn-info bg-blue-400 text-base-100">
                     Register
                   </button>
                 </div>
@@ -171,7 +171,7 @@ const Registration = () => {
                 Already have an account?{" "}
                 <Link
                   to={"/login"}
-                  className=" cursor-pointer link link-info italic font-semibold"
+                  className=" cursor-pointer link link-info text-blue-400 italic font-semibold"
                 >
                   Login
                 </Link>
